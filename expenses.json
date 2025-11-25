@@ -1,0 +1,18 @@
+{
+    "friends": [
+        "amit",
+        "pawan",
+        "sishir"
+    ],
+    "expenses": [
+        {
+            "amount": 2000.0,
+            "paid_by": "amit",
+            "shared_by": [
+                "amit",
+                "pawan",
+                "sishir"
+            ]
+        }
+    ]
+}
