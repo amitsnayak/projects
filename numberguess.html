@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Number Guessing Game</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    text-align: center;
+  }
+  .container {
+    background: rgba(255, 255, 255, 0.85);
+    padding: 30px 50px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  }
+  input {
+    padding: 8px;
+    width: 60px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    background: #ff6f61;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  button:hover {
+    background: #e65b50;
+  }
+  #message {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 18px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Number Guessing Game</h2>
+  <p>Guess a number between 1 and 100</p>
+  <input type="number" id="guess" min="1" max="100">
+  <button onclick="checkGuess()">Guess</button>
+  <p id="message"></p>
+  <button onclick="restartGame()">Restart Game</button>
+</div>
+
+<script>
+let secretNumber = Math.floor(Math.random() * 100) + 1;
+let attempts = 0;
+
+function checkGuess() {
+  const guess = parseInt(document.getElementById('guess').value);
+  const message = document.getElementById('message');
+  attempts++;
+
+  if (!guess || guess < 1 || guess > 100) {
+    message.innerText = 'Please enter a number between 1 and 100.';
+    message.style.color = 'red';
+    return;
+  }
+
+  if (guess === secretNumber) {
+    message.innerText = `🎉 Congratulations! You guessed it in ${attempts} attempts.`;
+    message.style.color = 'green';
+  } else if (guess < secretNumber) {
+    message.innerText = 'Too low! Try again.';
+    message.style.color = 'orange';
+  } else {
+    message.innerText = 'Too high! Try again.';
+    message.style.color = 'orange';
+  }
+}
+
+function restartGame() {
+  secretNumber = Math.floor(Math.random() * 100) + 1;
+  attempts = 0;
+  document.getElementById('message').innerText = '';
+  document.getElementById('guess').value = '';
+}
+</script>
+
+</body>
+</html>

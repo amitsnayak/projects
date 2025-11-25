@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Simple Password Manager</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding-top: 50px;
+  }
+
+  .container {
+    background: rgba(0,0,0,0.3);
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    width: 400px;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  input, button {
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+    width: 100%;
+    font-size: 16px;
+  }
+
+  button {
+    background-color: #ff6f61;
+    color: white;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #e65b50;
+  }
+
+  ul {
+    margin-top: 20px;
+    list-style: none;
+    padding-left: 0;
+  }
+
+  li {
+    background: rgba(255,255,255,0.2);
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .site, .password {
+    word-break: break-all;
+  }
+
+  .show-btn {
+    background: #007bff;
+    border-radius: 5px;
+    padding: 5px 8px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    color: white;
+  }
+
+  .show-btn:hover {
+    background: #0056b3;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Password Manager</h2>
+
+  <input type="text" id="site" placeholder="Website / App Name">
+  <input type="text" id="password" placeholder="Password">
+  <button onclick="addEntry()">Save Password</button>
+  <button onclick="generatePassword()">Generate Random Password</button>
+
+  <ul id="passwordList"></ul>
+</div>
+
+<script>
+let passwords = JSON.parse(localStorage.getItem('passwords')) || [];
+
+function renderList() {
+  const list = document.getElementById('passwordList');
+  list.innerHTML = '';
+
+  passwords.forEach((entry, index) => {
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <span class="site">${entry.site}</span>
+      <span class="password">${'*'.repeat(entry.password.length)}</span>
+      <button class="show-btn" onclick="togglePassword(${index}, this)">Show</button>
+    `;
+    list.appendChild(li);
+  });
+}
+
+function addEntry() {
+  const site = document.getElementById('site').value.trim();
+  const password = document.getElementById('password').value.trim();
+
+  if (!site || !password) {
+    alert('Please enter both site and password.');
+    return;
+  }
+
+  passwords.push({ site, password });
+  localStorage.setItem('passwords', JSON.stringify(passwords));
+
+  document.getElementById('site').value = '';
+  document.getElementById('password').value = '';
+
+  renderList();
+}
+
+function togglePassword(index, btn) {
+  const li = btn.parentElement;
+  const span = li.querySelector('.password');
+
+  if (btn.innerText === 'Show') {
+    span.innerText = passwords[index].password;
+    btn.innerText = 'Hide';
+  } else {
+    span.innerText = '*'.repeat(passwords[index].password.length);
+    btn.innerText = 'Show';
+  }
+}
+
+function generatePassword() {
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+';
+  let password = '';
+  for (let i = 0; i < 12; i++) {
+    password += chars[Math.floor(Math.random() * chars.length)];
+  }
+  document.getElementById('password').value = password;
+}
+
+// Initialize list
+renderList();
+</script>
+
+</body>
+</html>

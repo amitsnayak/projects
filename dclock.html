@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Beautiful Digital Clock</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #74ABE2, #5563DE);
+    margin: 0;
+    color: #fff;
+    flex-direction: column;
+  }
+
+  .clock-container {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 40px 60px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+
+  #clock {
+    font-size: 60px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  #date {
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 1px;
+  }
+
+  /* Optional subtle animation */
+  @keyframes glow {
+    0%, 100% { text-shadow: 0 0 10px #fff, 0 0 20px #fff; }
+    50% { text-shadow: 0 0 20px #fff, 0 0 30px #fff; }
+  }
+
+  #clock {
+    animation: glow 2s infinite;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="clock-container">
+  <div id="clock">00:00:00 AM</div>
+  <div id="date">Loading date...</div>
+</div>
+
+<script>
+function updateClock() {
+  const now = new Date();
+
+  let hours = now.getHours();
+  const minutes = now.getMinutes();
+  const seconds = now.getSeconds();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+
+  // Convert 24-hour to 12-hour format
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+
+  // Add leading zeros
+  const strHours = hours < 10 ? '0' + hours : hours;
+  const strMinutes = minutes < 10 ? '0' + minutes : minutes;
+  const strSeconds = seconds < 10 ? '0' + seconds : seconds;
+
+  document.getElementById('clock').innerText = `${strHours}:${strMinutes}:${strSeconds} ${ampm}`;
+
+  // Show date
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('date').innerText = now.toLocaleDateString(undefined, options);
+}
+
+// Update every second
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+
+</body>
+</html>

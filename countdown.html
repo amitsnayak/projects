@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Countdown Timer</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #74ABE2, #5563DE);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #fff;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .timer-container {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 40px 60px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+  }
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  #countdown {
+    font-size: 48px;
+    font-weight: bold;
+  }
+
+  input, button {
+    padding: 10px;
+    margin: 10px 5px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+  }
+
+  button {
+    background-color: #ff6f61;
+    color: white;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #e65b50;
+  }
+</style>
+</head>
+<body>
+
+<div class="timer-container">
+  <h2>Countdown Timer</h2>
+  <label for="date">Select target date:</label>
+  <input type="date" id="date">
+  <br>
+  <label for="time">Select time:</label>
+  <input type="time" id="time">
+  <br>
+  <button onclick="startCountdown()">Start Countdown</button>
+  <div id="countdown">00d 00h 00m 00s</div>
+</div>
+
+<script>
+let countdownInterval;
+
+function startCountdown() {
+  clearInterval(countdownInterval); // Clear any previous countdown
+
+  const dateInput = document.getElementById('date').value;
+  const timeInput = document.getElementById('time').value;
+
+  if (!dateInput || !timeInput) {
+    alert('Please select both date and time.');
+    return;
+  }
+
+  const target = new Date(`${dateInput}T${timeInput}:00`).getTime();
+
+  countdownInterval = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = target - now;
+
+    if (distance <= 0) {
+      clearInterval(countdownInterval);
+      document.getElementById('countdown').innerText = '🎉 Time is up!';
+      alert('⏰ Countdown finished!');
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000*60*60));
+    const minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
+    const seconds = Math.floor((distance % (1000*60)) / 1000);
+
+    document.getElementById('countdown').innerText =
+      `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }, 1000);
+}
+</script>
+
+</body>
+</html>
